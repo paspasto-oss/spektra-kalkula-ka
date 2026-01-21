@@ -31,10 +31,12 @@
   .header h1 { color: var(--brand-red); margin: 0; font-size: 1.6rem; font-weight: 800; text-transform: uppercase; }
 
   .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-    gap: 25px;
-  }
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+  gap: 25px;
+  align-items: stretch; /* DÔLEŽITÉ */
+}
+
 
   .card {
     background: #ffffff;
@@ -47,8 +49,11 @@
     position: relative;
   }
 
-  .card-title {
-    display: flex;
+  .card {
+  display: flex;
+  flex-direction: column;
+}
+
     align-items: center;
     gap: 12px;
     margin-bottom: 20px;
