@@ -48,17 +48,14 @@
         font-size: 0.9rem;
     }
 
-    /* --- ✅ UPDATE: Symetrický Grid 2x2 --- */
+    /* --- Symetrický Grid 2x2 --- */
     .grid {
       display: grid;
-      /* Na mobile 1 stĺpec */
       grid-template-columns: 1fr; 
       gap: 25px;
-      /* ✅ Zarovná výšku kariet v riadku na rovnakú úroveň */
       align-items: stretch; 
     }
 
-    /* Na tablete a PC (nad 768px) vynútime 2 stĺpce pre symetriu 2x2 */
     @media (min-width: 768px) {
       .grid {
         grid-template-columns: 1fr 1fr;
@@ -73,12 +70,10 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       border: 1px solid var(--border-color);
       border-left-width: 8px;
-      
-      /* ✅ Aby sa karta natiahla na celú výšku bunky */
       height: 100%; 
       display: flex;
       flex-direction: column;
-      justify-content: flex-start; /* Obsah začína hore */
+      justify-content: flex-start;
     }
 
     .card-title {
@@ -110,7 +105,13 @@
       grid-template-columns: 1fr 1fr;
       gap: 15px;
       margin-bottom: 15px;
-      align-items: end;
+      align-items: start; /* Zmenené z 'end' na 'start' kvôli vysvetlivkám */
+    }
+
+    /* Obal pre input + label + hint, aby boli pekne pod sebou */
+    .input-group {
+      display: flex;
+      flex-direction: column;
     }
 
     label {
@@ -119,7 +120,6 @@
       color: var(--text-muted);
       margin-bottom: 6px;
       font-weight: 700;
-      /* ✅ Pre lepšie zarovnanie ak je label na 2 riadky */
       min-height: 1.2em; 
     }
 
@@ -133,6 +133,20 @@
       font-family: 'Montserrat', sans-serif;
       height: 44px;
       font-size: 16px; 
+      /* Priprava pre vlastnú šípku */
+      appearance: none; 
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    /* --- ✅ Tučnejšia šípka pre SELECT --- */
+    select {
+      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000%22%20stroke%3D%22%23000%22%20stroke-width%3D%2220%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
+      background-repeat: no-repeat;
+      background-position: right 15px top 50%;
+      background-size: 14px auto;
+      padding-right: 40px;
+      cursor: pointer;
     }
 
     input:focus, select:focus { border-color: var(--brand-red); outline: none; }
@@ -142,6 +156,15 @@
         color: #444;
         border-color: #eee;
         cursor: default;
+    }
+
+    /* --- ✅ Štýl pre vysvetlivky --- */
+    .hint-text {
+      font-size: 0.65rem;
+      color: #888;
+      margin-top: 4px;
+      line-height: 1.2;
+      font-style: italic;
     }
 
     .res-item { margin-bottom: 15px; }
@@ -161,7 +184,6 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-top: 20px;
-      /* ✅ Aby bol summary vždy na spodku karty ak je karta natiahnutá */
       margin-top: auto; 
     }
 
@@ -206,16 +228,8 @@
     
     .btn-print:hover { background: #b00000; }
 
-    .hint-text {
-      font-size: 0.7rem;
-      color: #888;
-      margin-top: 4px;
-      line-height: 1.2;
-    }
-
     @media (max-width: 600px) {
-      /* Na malých mobiloch stackujeme inputy pod seba pre viac miesta */
-      .row { grid-template-columns: 1fr; gap: 10px; }
+      .row { grid-template-columns: 1fr; gap: 15px; }
       .summary-grid { gap: 5px; }
       .mini-box span { font-size: 0.9rem; }
     }
@@ -233,10 +247,14 @@
           border: 1px solid #ccc; 
           margin-bottom: 20px; 
           page-break-inside: avoid; 
-          height: auto; /* Pri tlači nenatahujeme */
+          height: auto;
       }
       .btn-print { display:none; }
       .hint-text { display: none; } 
+      select { 
+        background-image: none !important; /* Pri tlači skryť custom šípku ak robí problémy */
+        appearance: auto !important; 
+      }
     }
   </style>
 </head>
@@ -257,46 +275,51 @@
         </div>
 
         <div class="row">
-          <div>
+          <div class="input-group">
             <label>Vykurovaná plocha (m²)</label>
             <input type="number" id="area" value="150" min="0">
+            <div class="hint-text">Celková úžitková plocha domu.</div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Izolácia budovy (W/m²)</label>
             <select id="insulation">
               <option value="100">Nízka (starý dom) ~100 W/m²</option>
               <option value="60" selected>Stredná (zateplený) ~60 W/m²</option>
               <option value="35">Veľmi dobrá (novostavba) ~35 W/m²</option>
             </select>
+            <div class="hint-text">Vyberte približný štandard izolácie.</div>
           </div>
         </div>
 
         <div class="row">
-          <div>
+          <div class="input-group">
             <label>Typ kúrenia</label>
             <select id="heating_type">
               <option value="floor" selected>Podlahovka (35°C)</option>
               <option value="rad">Radiátory (55°C)</option>
             </select>
+            <!-- ✅ Požiadavka splnená: Vysvetlivka pod rámčekom -->
+            <div class="hint-text">Vyberte radiátor alebo podlahovka.</div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Ohrev vody (TÚV)</label>
             <select id="dhw">
               <option value="1.2" selected>Áno (cca 4 osoby)</option>
               <option value="1.0">Nie</option>
             </select>
+            <div class="hint-text">Zahrnúť ohrev teplej vody?</div>
           </div>
         </div>
 
         <div class="row">
-          <div>
+          <div class="input-group">
             <label>Ročný koeficient prevádzky</label>
             <input type="number" id="kwh_per_kw_year" value="2100" step="50" min="1200" max="3200">
             <div class="hint-text">
               Hodiny plného výkonu/rok (SR: <b>1800–2300</b>).
             </div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Porovnať úsporu voči</label>
             <select id="baseline">
               <option value="gas" selected>Zemný plyn</option>
@@ -304,6 +327,7 @@
               <option value="wood">Drevo</option>
               <option value="res_el">Priamovýhrev elektrina</option>
             </select>
+            <div class="hint-text">S čím chcete porovnať TČ?</div>
           </div>
         </div>
       </div>
@@ -317,26 +341,31 @@
 
         <label>Odporúčaný výkon TČ (kW)</label>
         <input type="text" id="hp_suggested" readonly style="font-weight:800; color:var(--brand-red); font-size:1.1rem; background:#fff;">
+        <div class="hint-text" style="margin-bottom:15px;">Odhadovaný potrebný výkon čerpadla.</div>
 
-        <div class="row" style="margin-top:15px;">
-          <div>
+        <div class="row">
+          <div class="input-group">
             <label>Elektrina (€/kWh)</label>
             <input type="number" id="p_el" step="0.01" value="0.20" min="0">
+            <div class="hint-text">Cena silovej elektriny.</div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Základný SCOP (katalóg)</label>
             <input type="number" id="scop" step="0.1" value="4.2" min="1.5" max="6">
+            <div class="hint-text">Tabuľková hodnota výrobcu.</div>
           </div>
         </div>
 
         <div class="row">
-          <div>
+          <div class="input-group">
             <label>Reálny SCOP (systém)</label>
             <input type="text" id="scop_eff" readonly style="font-weight:800;">
+            <div class="hint-text">Reálna účinnosť v prevádzke.</div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Poznámka</label>
             <input type="text" id="scop_note" readonly style="font-size: 0.8rem; font-weight: 600;">
+            <div class="hint-text">Dôvod zmeny účinnosti.</div>
           </div>
         </div>
       </div>
@@ -349,27 +378,30 @@
         </div>
 
         <div class="row">
-          <div>
+          <div class="input-group">
             <label title="Pozor: Zadajte cenu za kWh, nie za m3! (1 m3 = cca 10,55 kWh)">
               Plyn (€/kWh) ⓘ
             </label>
             <input type="number" id="p_gas" step="0.001" value="0.064" min="0.040" placeholder="0.064">
             <div class="hint-text">1 m³ ≈ 10,55 kWh</div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Drevo (€/prm)</label>
             <input type="number" id="p_wood" value="90" min="1">
+            <div class="hint-text">Cena za priestorový meter.</div>
           </div>
         </div>
 
         <div class="row">
-          <div>
+          <div class="input-group">
             <label>Pelety (€/t)</label>
             <input type="number" id="p_pellets" value="280" min="1">
+            <div class="hint-text">Cena za 1 tonu peliet.</div>
           </div>
-          <div>
+          <div class="input-group">
             <label>Účinnosť plyn. kotla (%)</label>
             <input type="number" id="eff_gas" value="95" min="50" max="110">
+            <div class="hint-text">Reálna ročná účinnosť.</div>
           </div>
         </div>
       </div>
