@@ -48,11 +48,21 @@
         font-size: 0.9rem;
     }
 
+    /* --- ✅ UPDATE: Symetrický Grid 2x2 --- */
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      /* Na mobile 1 stĺpec */
+      grid-template-columns: 1fr; 
       gap: 25px;
-      align-items: start;
+      /* ✅ Zarovná výšku kariet v riadku na rovnakú úroveň */
+      align-items: stretch; 
+    }
+
+    /* Na tablete a PC (nad 768px) vynútime 2 stĺpce pre symetriu 2x2 */
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
     }
 
     .card {
@@ -63,8 +73,12 @@
       box-shadow: 0 4px 15px rgba(0,0,0,0.05);
       border: 1px solid var(--border-color);
       border-left-width: 8px;
+      
+      /* ✅ Aby sa karta natiahla na celú výšku bunky */
+      height: 100%; 
       display: flex;
       flex-direction: column;
+      justify-content: flex-start; /* Obsah začína hore */
     }
 
     .card-title {
@@ -105,6 +119,8 @@
       color: var(--text-muted);
       margin-bottom: 6px;
       font-weight: 700;
+      /* ✅ Pre lepšie zarovnanie ak je label na 2 riadky */
+      min-height: 1.2em; 
     }
 
     input, select {
@@ -145,6 +161,8 @@
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       margin-top: 20px;
+      /* ✅ Aby bol summary vždy na spodku karty ak je karta natiahnutá */
+      margin-top: auto; 
     }
 
     .mini-box {
@@ -188,7 +206,6 @@
     
     .btn-print:hover { background: #b00000; }
 
-    /* Helper pre nápovedu */
     .hint-text {
       font-size: 0.7rem;
       color: #888;
@@ -197,8 +214,8 @@
     }
 
     @media (max-width: 600px) {
-      .grid { grid-template-columns: 1fr; }
-      .row { grid-template-columns: 1fr; }
+      /* Na malých mobiloch stackujeme inputy pod seba pre viac miesta */
+      .row { grid-template-columns: 1fr; gap: 10px; }
       .summary-grid { gap: 5px; }
       .mini-box span { font-size: 0.9rem; }
     }
@@ -216,6 +233,7 @@
           border: 1px solid #ccc; 
           margin-bottom: 20px; 
           page-break-inside: avoid; 
+          height: auto; /* Pri tlači nenatahujeme */
       }
       .btn-print { display:none; }
       .hint-text { display: none; } 
@@ -307,7 +325,6 @@
           </div>
           <div>
             <label>Základný SCOP (katalóg)</label>
-            <!-- UPDATED: 4.2 je realistickejší štandard pre R290 v roku 2026 -->
             <input type="number" id="scop" step="0.1" value="4.2" min="1.5" max="6">
           </div>
         </div>
@@ -319,7 +336,6 @@
           </div>
           <div>
             <label>Poznámka</label>
-            <!-- Note field updated via JS -->
             <input type="text" id="scop_note" readonly style="font-size: 0.8rem; font-weight: 600;">
           </div>
         </div>
@@ -413,9 +429,7 @@
         let note = '';
         let noteColor = '#555';
 
-        // Logika pre SCOP podľa typu kúrenia (Update 2026)
         if (sys === 'rad') { 
-            // Radiátory 55°C majú výrazne nižší SCOP ako podlahovka 35°C
             scopAdj = -1.1; 
             note = 'Radiátory (55°C): Vyššia spotreba'; 
             noteColor = 'var(--warning-orange)';
