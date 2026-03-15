@@ -1,542 +1,790 @@
 <!DOCTYPE html>
 <html lang="sk">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Spektra Install – Energetická kalkulačka 2026</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Spektra Install – Energetická kalkulačka 2026</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --brand-red: #D60000;
-      --bg-light: #f4f4f4;
-      --text-dark: #1a1a1a;
-      --text-muted: #555;
-      --border-color: #e0e0e0;
-      --warning-orange: #d67f00;
-      --success-green: #2e7d32;
-    }
+    <style>
+        :root {
+            /* Vami definované farby pre Spektra Install */
+            --primary-color: #1F487E !important;
+            --secondary-color: #e63946 !important;
+            --text-color: #2b2d42 !important;
+            --bg-light: #f8f9fa;
+            --accent-blue: #e7f3fe;
+            --white: #ffffff;
+            --card-shadow: 0 10px 30px rgba(31, 72, 126, 0.08);
+            --border-color: #e0e4e8;
+        }
 
-    * { box-sizing: border-box; }
+        * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Montserrat', sans-serif;
-      background-color: var(--bg-light);
-      color: var(--text-dark);
-      line-height: 1.4;
-      overflow-x: hidden; 
-    }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+            background-color: var(--white);
+            color: var(--text-color);
+            line-height: 1.8;
+        }
 
-    .wrapper { padding: 20px; max-width: 1100px; margin: auto; }
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
 
-    .header { text-align: center; margin-bottom: 30px; }
-    .header h1 {
-      color: var(--brand-red);
-      margin: 0;
-      font-size: 1.6rem;
-      font-weight: 800;
-      text-transform: uppercase;
-    }
-    .header small {
-        display: block;
-        margin-top: 5px;
-        font-weight: 400;
-        color: var(--text-muted);
-        font-size: 0.9rem;
-    }
+        /* --- HEADER --- */
+        .header-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .header-title p {
+            color: var(--secondary-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+        .header-title h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin: 0;
+            text-transform: uppercase;
+        }
 
-    /* --- Symetrický Grid 2x2 --- */
-    .grid {
-      display: grid;
-      grid-template-columns: 1fr; 
-      gap: 25px;
-      align-items: stretch; 
-    }
+        /* --- CALCULATOR GRID --- */
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 60px;
+        }
 
-    @media (min-width: 768px) {
-      .grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
+        @media (min-width: 900px) {
+            .grid { grid-template-columns: 1fr 1fr; }
+        }
 
-    .card {
-      background: #ffffff;
-      padding: 25px;
-      border-radius: 8px;
-      border-left: 8px solid var(--brand-red);
-      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-      border: 1px solid var(--border-color);
-      border-left-width: 8px;
-      height: 100%; 
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-    }
+        .card {
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
 
-    .card-title {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 20px;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 12px;
-    }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--secondary-color);
+        }
 
-    .card-title h2 {
-      font-size: 1rem;
-      margin: 0;
-      color: var(--brand-red);
-      text-transform: uppercase;
-      font-weight: 800;
-    }
+        .card-title {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #f8f8f8;
+            padding-bottom: 15px;
+        }
 
-    .card-title svg {
-      width: 24px;
-      height: 24px;
-      fill: #000;
-      flex: 0 0 auto;
-    }
+        .card-title h2 {
+            font-size: 1rem;
+            margin: 0;
+            color: var(--primary-color) !important;
+            text-transform: uppercase;
+            font-weight: 800;
+            border-bottom: none !important; /* Reset pre globálne h2 štýly */
+            padding-bottom: 0 !important;
+        }
 
-    .row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 15px;
-      margin-bottom: 15px;
-      align-items: start; /* Zmenené z 'end' na 'start' kvôli vysvetlivkám */
-    }
+        .card-title svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--secondary-color);
+        }
 
-    /* Obal pre input + label + hint, aby boli pekne pod sebou */
-    .input-group {
-      display: flex;
-      flex-direction: column;
-    }
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
 
-    label {
-      display: block;
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-      font-weight: 700;
-      min-height: 1.2em; 
-    }
+        .input-group { display: flex; flex-direction: column; }
 
-    input, select {
-      width: 100%;
-      background: #fff;
-      border: 1px solid var(--border-color);
-      padding: 10px;
-      border-radius: 4px;
-      color: var(--text-dark);
-      font-family: 'Montserrat', sans-serif;
-      height: 44px;
-      font-size: 16px; 
-      /* Priprava pre vlastnú šípku */
-      appearance: none; 
-      -webkit-appearance: none;
-      -moz-appearance: none;
-    }
+        label {
+            font-size: 0.75rem;
+            color: #666;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
 
-    /* --- ✅ Tučnejšia šípka pre SELECT --- */
-    select {
-      background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23000%22%20stroke%3D%22%23000%22%20stroke-width%3D%2220%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E");
-      background-repeat: no-repeat;
-      background-position: right 15px top 50%;
-      background-size: 14px auto;
-      padding-right: 40px;
-      cursor: pointer;
-    }
+        input, select {
+            width: 100%;
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.95rem;
+            height: 48px;
+            transition: all 0.3s;
+        }
+        
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F487E' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+            cursor: pointer;
+        }
 
-    input:focus, select:focus { border-color: var(--brand-red); outline: none; }
-    
-    input[readonly] {
-        background-color: #fcfcfc;
-        color: #444;
-        border-color: #eee;
-        cursor: default;
-    }
+        input:focus, select:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(31, 72, 126, 0.05);
+        }
 
-    /* --- ✅ Štýl pre vysvetlivky --- */
-    .hint-text {
-      font-size: 0.65rem;
-      color: #888;
-      margin-top: 4px;
-      line-height: 1.2;
-      font-style: italic;
-    }
+        input[readonly] { background: #fdfdfd; cursor: default; border-color: #eee; }
 
-    .res-item { margin-bottom: 15px; }
-    .res-info {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 6px;
-      font-weight: 700;
-      font-size: 0.9rem;
-    }
+        .hint-text {
+            font-size: 0.65rem;
+            color: #999;
+            margin-top: 5px;
+            line-height: 1.3;
+        }
 
-    .bar-bg { background: #f0f0f0; height: 10px; border-radius: 2px; overflow: hidden; }
-    .bar-fill { height: 100%; background: var(--brand-red); transition: width 0.6s ease; }
+        /* --- RESULTS --- */
+        .res-item { margin-bottom: 18px; }
+        .res-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-weight: 700;
+            font-size: 0.85rem;
+        }
+        .bar-bg { background: #eee; height: 8px; border-radius: 4px; overflow: hidden; }
+        .bar-fill { height: 100%; background: var(--secondary-color); transition: width 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-    .summary-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-top: 20px;
-      margin-top: auto; 
-    }
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: auto;
+            padding-top: 20px;
+        }
+        .mini-box {
+            background: var(--bg-light);
+            padding: 15px 10px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #eee;
+        }
+        .mini-box b { display: block; font-size: 0.6rem; color: #888; text-transform: uppercase; margin-bottom: 5px; }
+        .mini-box span { font-size: 0.9rem; font-weight: 800; color: var(--primary-color); }
 
-    .mini-box {
-      background: #f9f9f9;
-      padding: 12px 5px;
-      border-radius: 4px;
-      text-align: center;
-      border: 1px solid #eee;
-    }
+        .btn-main {
+            background: var(--secondary-color) !important;
+            color: white !important;
+            border: none;
+            padding: 18px;
+            border-radius: 10px;
+            font-weight: 800;
+            width: 100%;
+            margin-top: 20px;
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 1rem;
+            transition: transform 0.2s, background 0.3s;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.2);
+        }
+        .btn-main:hover { background: #b92e3a !important; transform: translateY(-2px); }
 
-    .mini-box b {
-      display: block;
-      font-size: 0.6rem;
-      color: var(--text-muted);
-      text-transform: uppercase;
-      margin-bottom: 4px;
-    }
+        /* --- INFO SECTION (VAŠ KÓD) --- */
+        .intro-section {
+            text-align: center;
+            margin-bottom: 60px;
+        }
 
-    .mini-box span {
-      font-size: 0.95rem;
-      font-weight: 800;
-      color: var(--brand-red);
-      white-space: nowrap;
-    }
+        h2 {
+            color: var(--primary-color) !important;
+            font-size: 2.2rem;
+            margin-top: 50px;
+            margin-bottom: 30px;
+            padding-bottom: 12px;
+            border-bottom: 5px solid var(--secondary-color) !important;
+            width: fit-content;
+            display: block;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
 
-    .btn-print {
-      background: var(--brand-red);
-      color: white;
-      border: none;
-      padding: 15px;
-      border-radius: 4px;
-      font-weight: 800;
-      width: 100%;
-      margin-top: 20px;
-      cursor: pointer;
-      text-transform: uppercase;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 1rem;
-      transition: background 0.3s;
-    }
-    
-    .btn-print:hover { background: #b00000; }
+        .intro-section h2 {
+            margin-left: auto;
+            margin-right: auto;
+        }
 
-    @media (max-width: 600px) {
-      .row { grid-template-columns: 1fr; gap: 15px; }
-      .summary-grid { gap: 5px; }
-      .mini-box span { font-size: 0.9rem; }
-    }
+        h3 {
+            color: var(--primary-color) !important;
+            font-size: 1.6rem;
+            margin-top: 35px;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
 
-    @media print {
-      body { background:#fff; font-size: 12pt; }
-      .wrapper { padding: 0; max-width: none; width: 100%; }
-      .grid { 
-          display: grid; 
-          grid-template-columns: 1fr 1fr; 
-          gap: 20px; 
-      }
-      .card { 
-          box-shadow: none; 
-          border: 1px solid #ccc; 
-          margin-bottom: 20px; 
-          page-break-inside: avoid; 
-          height: auto;
-      }
-      .btn-print { display:none; }
-      .hint-text { display: none; } 
-      select { 
-        background-image: none !important; /* Pri tlači skryť custom šípku ak robí problémy */
-        appearance: auto !important; 
-      }
-    }
-  </style>
+        p {
+            margin-bottom: 25px;
+            font-size: 1.1rem;
+            text-align: justify;
+            color: var(--text-color);
+        }
+
+        .highlight {
+            font-weight: bold;
+            color: var(--primary-color) !important;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .step-card {
+            background: var(--bg-light);
+            padding: 30px;
+            border-radius: 20px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            transition: all 0.3s ease;
+        }
+
+        .step-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(31, 72, 126, 0.1);
+            border-color: var(--primary-color) !important;
+        }
+
+        .step-card h4 {
+            color: var(--primary-color) !important;
+            margin: 10px 0;
+            font-weight: 800;
+            text-transform: uppercase;
+            font-size: 0.95rem;
+        }
+
+        .step-number {
+            display: inline-block;
+            width: 45px;
+            height: 45px;
+            background: var(--primary-color) !important;
+            color: white !important;
+            border-radius: 50%;
+            line-height: 45px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .savings-box {
+            background: linear-gradient(135deg, #1F487E 0%, #2c5d9e 100%) !important;
+            color: white !important;
+            padding: 45px;
+            border-radius: 25px;
+            margin: 50px 0;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            box-shadow: 0 10px 25px rgba(31, 72, 126, 0.2);
+        }
+
+        .savings-icon { font-size: 3rem; }
+
+        .savings-content h3 {
+            color: white !important;
+            margin-top: 0;
+            border-bottom: none !important;
+        }
+
+        .savings-content p {
+            color: white !important;
+            text-align: left;
+        }
+
+        .grid-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin: 40px 0;
+        }
+
+        .detail-item {
+            display: flex;
+            gap: 15px;
+            background: var(--accent-blue);
+            padding: 20px;
+            border-radius: 12px;
+            align-items: flex-start;
+        }
+
+        .check-icon {
+            color: #28a745 !important;
+            font-weight: bold;
+            font-size: 1.4rem;
+        }
+
+        .faq-item { margin-bottom: 30px; }
+        .faq-item strong {
+            display: block;
+            color: var(--primary-color) !important;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            font-weight: 800;
+        }
+
+        .cta-box {
+            background: var(--bg-light);
+            border: 3px dashed var(--primary-color) !important;
+            padding: 50px;
+            border-radius: 25px;
+            text-align: center;
+            margin-top: 70px;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background: var(--secondary-color) !important;
+            color: white !important;
+            padding: 18px 45px;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-top: 25px;
+            transition: all 0.3s;
+            box-shadow: 0 5px 15px rgba(230, 57, 70, 0.3);
+            text-transform: uppercase;
+        }
+
+        .btn-primary:hover {
+            background: #b92e3a !important;
+            transform: scale(1.03);
+        }
+
+        @media (max-width: 768px) {
+            .process-steps, .grid-details, .savings-box {
+                grid-template-columns: 1fr;
+                flex-direction: column;
+                text-align: center;
+            }
+            .savings-content p { text-align: center; }
+            h2 { width: auto; margin-left: auto; margin-right: auto; text-align: center; font-size: 1.8rem;}
+            .header-title h1 { font-size: 1.8rem; }
+            .input-row { grid-template-columns: 1fr; }
+            .summary-grid { grid-template-columns: 1fr; }
+        }
+
+        @media print {
+            .btn-main, .cta-box, .btn-primary { display: none !important; }
+            body { background: white; }
+            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
+            .grid { grid-template-columns: 1fr 1fr !important; }
+        }
+    </style>
 </head>
 <body>
 
-  <div class="wrapper">
-    <div class="header">
-      <h1>Energetická kalkulačka</h1>
-      <small>Spektra Install – Edition 2026</small>
+<div class="container">
+    
+    <!-- HEADER KALKULAČKY -->
+    <div class="header-title">
+        <p>Energetické riešenia Spektra</p>
+        <h1>Energetická kalkulačka 2026</h1>
     </div>
 
+    <!-- KALKULAČKA (INTERAKTÍVNA ČASŤ) -->
     <div class="grid">
-      <!-- KARTA 1 -->
-      <div class="card">
-        <div class="card-title">
-          <svg viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>
-          <h2>Výpočet tepelnej straty</h2>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>Vykurovaná plocha (m²)</label>
-            <input type="number" id="area" value="150" min="0">
-            <div class="hint-text">Celková úžitková plocha domu.</div>
-          </div>
-          <div class="input-group">
-            <label>Izolácia budovy (W/m²)</label>
-            <select id="insulation">
-              <option value="100">Nízka (starý dom) ~100 W/m²</option>
-              <option value="60" selected>Stredná (zateplený) ~60 W/m²</option>
-              <option value="35">Veľmi dobrá (novostavba) ~35 W/m²</option>
-            </select>
-            <div class="hint-text">Vyberte približný štandard izolácie.</div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>Typ kúrenia</label>
-            <select id="heating_type">
-              <option value="floor" selected>Podlahovka (35°C)</option>
-              <option value="rad">Radiátory (55°C)</option>
-            </select>
-            <!-- ✅ Požiadavka splnená: Vysvetlivka pod rámčekom -->
-            <div class="hint-text">Vyberte radiátor alebo podlahovka.</div>
-          </div>
-          <div class="input-group">
-            <label>Ohrev vody (TÚV)</label>
-            <select id="dhw">
-              <option value="1.2" selected>Áno (cca 4 osoby)</option>
-              <option value="1.0">Nie</option>
-            </select>
-            <div class="hint-text">Zahrnúť ohrev teplej vody?</div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>Ročný koeficient prevádzky</label>
-            <input type="number" id="kwh_per_kw_year" value="2100" step="50" min="1200" max="3200">
-            <div class="hint-text">
-              Hodiny plného výkonu/rok (SR: <b>1800–2300</b>).
+        <!-- KARTA 1: VSTUPY -->
+        <div class="card">
+            <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>
+                <h2>Vstupné údaje objektu</h2>
             </div>
-          </div>
-          <div class="input-group">
-            <label>Porovnať úsporu voči</label>
-            <select id="baseline">
-              <option value="gas" selected>Zemný plyn</option>
-              <option value="pellets">Pelety</option>
-              <option value="wood">Drevo</option>
-              <option value="res_el">Priamovýhrev elektrina</option>
-            </select>
-            <div class="hint-text">S čím chcete porovnať TČ?</div>
-          </div>
-        </div>
-      </div>
 
-      <!-- KARTA 2 -->
-      <div class="card">
-        <div class="card-title">
-          <svg viewBox="0 0 24 24"><path d="M7,2H17A2,2 0 0,1 19,4V20A2,2 0 0,1 17,22H7A2,2 0 0,1 5,20V4A2,2 0 0,1 7,2M7,4V8H17V4H7M7,10V12H9V10H7M11,10V12H13V10H11M15,10V12H17V10H15M7,14V16H9V14H7M11,14V16H13V14H11M15,14V16H17V14H15M7,18V20H9V18H7M11,18V20H13V18H11M15,18V20H17V18H15Z"/></svg>
-          <h2>Výkon a technológie</h2>
-        </div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Plocha (m²)</label>
+                    <input type="number" id="area" value="150">
+                    <div class="hint-text">Vykurovaná úžitková plocha.</div>
+                </div>
+                <div class="input-group">
+                    <label>Izolácia objektu</label>
+                    <select id="insulation">
+                        <option value="100">Starý dom (100W/m²)</option>
+                        <option value="60" selected>Zateplený (60W/m²)</option>
+                        <option value="35">Novostavba (35W/m²)</option>
+                    </select>
+                    <div class="hint-text">Tepelno-technický stav.</div>
+                </div>
+            </div>
 
-        <label>Odporúčaný výkon TČ (kW)</label>
-        <input type="text" id="hp_suggested" readonly style="font-weight:800; color:var(--brand-red); font-size:1.1rem; background:#fff;">
-        <div class="hint-text" style="margin-bottom:15px;">Odhadovaný potrebný výkon čerpadla.</div>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Systém kúrenia</label>
+                    <select id="heating_type">
+                        <option value="floor" selected>Podlahové (35°C)</option>
+                        <option value="rad">Radiátory (55°C)</option>
+                    </select>
+                    <div class="hint-text">Typ odovzdávacieho systému.</div>
+                </div>
+                <div class="input-group">
+                    <label>Ohrev vody (TÚV)</label>
+                    <select id="dhw">
+                        <option value="1.2" selected>Áno (cca 4 osoby)</option>
+                        <option value="1.0">Nie</option>
+                    </select>
+                    <div class="hint-text">Zahrnúť prípravu teplej vody.</div>
+                </div>
+            </div>
 
-        <div class="row">
-          <div class="input-group">
-            <label>Elektrina (€/kWh)</label>
-            <input type="number" id="p_el" step="0.01" value="0.20" min="0">
-            <div class="hint-text">Cena silovej elektriny.</div>
-          </div>
-          <div class="input-group">
-            <label>Základný SCOP (katalóg)</label>
-            <input type="number" id="scop" step="0.1" value="4.2" min="1.5" max="6">
-            <div class="hint-text">Tabuľková hodnota výrobcu.</div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="input-group">
-            <label>Reálny SCOP (systém)</label>
-            <input type="text" id="scop_eff" readonly style="font-weight:800;">
-            <div class="hint-text">Reálna účinnosť v prevádzke.</div>
-          </div>
-          <div class="input-group">
-            <label>Poznámka</label>
-            <input type="text" id="scop_note" readonly style="font-size: 0.8rem; font-weight: 600;">
-            <div class="hint-text">Dôvod zmeny účinnosti.</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- KARTA 3 -->
-      <div class="card">
-        <div class="card-title">
-          <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"/></svg>
-          <h2>Ceny palív na trhu (2026)</h2>
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Ročná prevádzka</label>
+                    <input type="number" id="kwh_per_kw_year" value="2100">
+                    <div class="hint-text">Koeficient hodín (SR: 1800-2300).</div>
+                </div>
+                <div class="input-group">
+                    <label>Porovnať s</label>
+                    <select id="baseline">
+                        <option value="gas" selected>Zemný plyn</option>
+                        <option value="pellets">Drevené pelety</option>
+                        <option value="wood">Palivové drevo</option>
+                        <option value="res_el">Elektrický kotol</option>
+                    </select>
+                    <div class="hint-text">Referenčný zdroj tepla.</div>
+                </div>
+            </div>
         </div>
 
-        <div class="row">
-          <div class="input-group">
-            <label title="Pozor: Zadajte cenu za kWh, nie za m3! (1 m3 = cca 10,55 kWh)">
-              Plyn (€/kWh) ⓘ
-            </label>
-            <input type="number" id="p_gas" step="0.001" value="0.064" min="0.040" placeholder="0.064">
-            <div class="hint-text">1 m³ ≈ 10,55 kWh</div>
-          </div>
-          <div class="input-group">
-            <label>Drevo (€/prm)</label>
-            <input type="number" id="p_wood" value="90" min="1">
-            <div class="hint-text">Cena za priestorový meter.</div>
-          </div>
+        <!-- KARTA 2: TECHNOLÓGIA -->
+        <div class="card">
+            <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M13,10H18L12,22V14H7L13,2Z"/></svg>
+                <h2>Výkon a účinnosť</h2>
+            </div>
+
+            <div class="input-group" style="margin-bottom: 25px;">
+                <label>Odporúčaný výkon TČ (kW)</label>
+                <input type="text" id="hp_suggested" readonly style="color:var(--secondary-color); font-weight:800; font-size:1.2rem;">
+                <div class="hint-text">Odhadovaný menovitý výkon zariadenia.</div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Elektrina (€/kWh)</label>
+                    <input type="number" id="p_el" step="0.01" value="0.20">
+                    <div class="hint-text">Celková cena za 1 kWh.</div>
+                </div>
+                <div class="input-group">
+                    <label>Základný SCOP</label>
+                    <input type="number" id="scop" step="0.1" value="4.2">
+                    <div class="hint-text">Katalógový koeficient.</div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Reálny SCOP</label>
+                    <input type="text" id="scop_eff" readonly style="font-weight:700;">
+                    <div class="hint-text">Účinnosť po korekcii systému.</div>
+                </div>
+                <div class="input-group">
+                    <label>Poznámka</label>
+                    <input type="text" id="scop_note" readonly style="font-size:0.75rem;">
+                    <div class="hint-text">Vplyv teplotného spádu.</div>
+                </div>
+            </div>
         </div>
 
-        <div class="row">
-          <div class="input-group">
-            <label>Pelety (€/t)</label>
-            <input type="number" id="p_pellets" value="280" min="1">
-            <div class="hint-text">Cena za 1 tonu peliet.</div>
-          </div>
-          <div class="input-group">
-            <label>Účinnosť plyn. kotla (%)</label>
-            <input type="number" id="eff_gas" value="95" min="50" max="110">
-            <div class="hint-text">Reálna ročná účinnosť.</div>
-          </div>
+        <!-- KARTA 3: CENY TRHU -->
+        <div class="card">
+            <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M12,2L1,21H23L12,2M12,6L19.53,19H4.47L12,6M11,10V14H13V10H11M11,16V18H13V16H11Z"/></svg>
+                <h2>Ceny palív na trhu (2026)</h2>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Plyn (€/kWh)</label>
+                    <input type="number" id="p_gas" step="0.001" value="0.064">
+                    <div class="hint-text">Cena plynu po započítaní poplatkov.</div>
+                </div>
+                <div class="input-group">
+                    <label>Drevo (€/prm)</label>
+                    <input type="number" id="p_wood" value="95">
+                    <div class="hint-text">Cena za priestorový meter.</div>
+                </div>
+            </div>
+
+            <div class="input-row">
+                <div class="input-group">
+                    <label>Pelety (€/t)</label>
+                    <input type="number" id="p_pellets" value="290">
+                    <div class="hint-text">Cena za tonu A1 kvality.</div>
+                </div>
+                <div class="input-group">
+                    <label>Účinnosť kotla (%)</label>
+                    <input type="number" id="eff_gas" value="95">
+                    <div class="hint-text">Reálna účinnosť spaľovania.</div>
+                </div>
+            </div>
         </div>
-      </div>
 
-      <!-- KARTA 4 -->
-      <div class="card">
-        <div class="card-title">
-          <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"/></svg>
-          <h2>Porovnanie nákladov</h2>
+        <!-- KARTA 4: POROVNANIE -->
+        <div class="card">
+            <div class="card-title">
+                <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"/></svg>
+                <h2>Porovnanie nákladov</h2>
+            </div>
+
+            <div id="resultsList"></div>
+
+            <div class="summary-grid">
+                <div class="mini-box"><b>Tep. strata</b><span id="loss_val">0 kW</span></div>
+                <div class="mini-box"><b>Potreba tepla</b><span id="need_val">0 kWh</span></div>
+                <div class="mini-box"><b>Vaša úspora</b><span id="save_val">0 €</span></div>
+            </div>
+
+            <button class="btn-main" onclick="window.print()">Vytlačiť PDF Report</button>
         </div>
-
-        <div id="resultsList"></div>
-
-        <div class="summary-grid">
-          <div class="mini-box"><b>Tep. strata</b><span id="loss_val">0 kW</span></div>
-          <div class="mini-box"><b>Potreba tepla</b><span id="need_val">0 kWh</span></div>
-          <div class="mini-box"><b>Vaša úspora</b><span id="save_val">0 €</span></div>
-        </div>
-
-        <button class="btn-print" onclick="window.print()">Vytlačiť PDF</button>
-      </div>
     </div>
-  </div>
 
-  <script>
+    <!-- INFO SEKCE (VAŠ OBSAH) -->
+    <div class="intro-section">
+        <h2>Ako funguje naša energetická kalkulačka?</h2>
+        <p>
+            V <span class="highlight">Spektra Install</span> chápeme, že prechod na moderné vykurovanie je investícia na desaťročia. Práve preto sme vyvinuli nástroj <strong>Edition 2026</strong>. Táto energetická kalkulačka nie je len jednoduchý program, ale komplexný algoritmus, ktorý spracováva tisíce kombinácií dát, aby vám priniesol výsledok prispôsobený slovenskej architektúre a klimatickým podmienkam.
+        </p>
+        <p>
+            Či už plánujete rekonštrukciu staršieho rodinného domu alebo staviate modernú novostavbu, správny odhad energetických potrieb je základným kameňom vášho úspechu. Naša kalkulačka zjednodušuje komplikovanú inžiniersku prácu do niekoľkých kliknutí, pričom <strong>automaticky zohľadňuje všetky kľúčové premenné</strong>, ako sú objemové straty vzduchu, prestup tepla cez rôzne materiály a špecifické požiadavky na prípravu teplej vody.
+        </p>
+    </div>
+
+    <div class="process-steps">
+        <div class="step-card">
+            <div class="step-number">1</div>
+            <h4>Vložíte parametre</h4>
+            <p>Zadáte základné údaje o ploche a type izolácie. Systém okamžite priradí technické koeficienty pre váš typ stavby.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">2</div>
+            <h4>Prebehne analýza</h4>
+            <p>Algoritmus prepočíta tepelnú stratu obálky domu aj potrebu energie na ohrev úžitkovej vody pre celú rodinu.</p>
+        </div>
+        <div class="step-card">
+            <div class="step-number">3</div>
+            <h4>Získate report</h4>
+            <p>Výsledok neuvidíte len na obrazovke. Môžete si ho nechať zaslať na e-mail vo forme podrobného energetického prehľadu.</p>
+        </div>
+    </div>
+
+    <h2>Prečo je dôležitá presná tepelná strata?</h2>
+    <p>
+        Tepelná strata domu je v podstate množstvo energie, ktoré musíte do domu neustále dodávať, aby ste v ňom udržali príjemnú teplotu, kým vonku mrzne. Ak tento výpočet podceníte, vaše tepelné čerpadlo nebude stíhať a zapne si drahú elektrickú špirálu. Ak ho naopak nadhodnotíte, kúpite si zbytočne drahý stroj, ktorý sa bude neustále zapínať a vypínať, čím sa rýchlejšie opotrebuje.
+    </p>
+    <p>
+        Naša technológia hľadá takzvané <span class="highlight">ekonomické optimum</span>. To znamená výkon, pri ktorom dosiahnete najnižšie prevádzkové náklady pri zachovaní maximálnej životnosti zariadenia. V roku 2026 je pri cenách energií dôležitý každý jeden ušetrený kilowatt, a práve správne dimenzovanie je prvým krokom k návratnosti vašej investície.
+    </p>
+
+    <div class="savings-box">
+        <div class="savings-icon">💰</div>
+        <div class="savings-content">
+            <h3>Maximalizujte úspory a dotácie</h3>
+            <p>
+                Inštaláciou správne dimenzovaného tepelného čerpadla dokážete znížiť svoje účty za energie až o <strong>70 %</strong> v porovnaní s elektrokotlom alebo starým plynovým kotlom. Navyše, naše riešenia sú plne kompatibilné s dotačným programom <strong>Zelená domácnostiam</strong>, kde môžete získať príspevok v hodnote niekoľkých tisíc eur.
+            </p>
+        </div>
+    </div>
+
+    <h2>Faktory, ktoré ovplyvňujú váš výsledok</h2>
+    <div class="grid-details">
+        <div class="detail-item">
+            <span class="check-icon">✓</span>
+            <div>
+                <strong>Lokalita a podnebie:</strong> Kalkulačka vie, že zima v Žiline vyžaduje iný výkon ako zima v Komárne. Zohľadňujeme klimatické zóny Slovenska.
+            </div>
+        </div>
+        <div class="detail-item">
+            <span class="check-icon">✓</span>
+            <div>
+                <strong>Stav zateplenia:</strong> Analyzujeme rozdiely medzi pôvodným murivom, čiastočným zateplením a modernými štandardmi A0.
+            </div>
+        </div>
+        <div class="detail-item">
+            <span class="check-icon">✓</span>
+            <div>
+                <strong>Počet osôb:</strong> Príprava teplej vody pre 4 osoby spotrebuje významnú časť výkonu. Tento faktor nikdy nezanedbávame.
+            </div>
+        </div>
+        <div class="detail-item">
+            <span class="check-icon">✓</span>
+            <div>
+                <strong>Okná a dvere:</strong> Zohľadňujeme rozdiel v stratách medzi starými dvojsklami a modernými oknami s trojsklom.
+            </div>
+        </div>
+    </div>
+
+    <h2>Často kladené otázky (FAQ)</h2>
+    <div class="faq-section">
+        <div class="faq-item">
+            <strong>Je výsledok z kalkulačky záväzný?</strong>
+            <p>Výsledok slúži ako vysoko presný orientačný bod. Pre finálnu inštaláciu vždy odporúčame kontrolu naším technikom priamo na mieste, aby sa zohľadnili aj drobné detaily stavby.</p>
+        </div>
+        <div class="faq-item">
+            <strong>Čo ak plánujem v budúcnosti dom zatepliť?</strong>
+            <p>V tom prípade odporúčame zadať do kalkulačky cieľový stav. Vyhnete sa tak nákupu príliš silného čerpadla, ktoré by po zateplení bolo neefektívne.</p>
+        </div>
+        <div class="faq-item">
+            <strong>Počíta kalkulačka aj s ohrevom bazéna?</strong>
+            <p>Základný výpočet je určený pre kúrenie a teplú úžitkovú vodu. Ak máte špecifické požiadavky ako ohrev bazéna, uveďte to prosím v dopyte po odoslaní reportu.</p>
+        </div>
+        <div class="faq-item">
+            <strong>Ako ovplyvňuje typ kúrenia výkon TČ?</strong>
+            <p>Podlahové kúrenie pracuje s nižšou teplotou vody ako radiátory, čo zvyšuje efektivitu čerpadla. Naša kalkulačka tieto rozdiely v dynamike sústavy spracováva automaticky.</p>
+        </div>
+    </div>
+
+    <div class="cta-box">
+        <h3>Chcete mať výsledky prehľadne uložené?</h3>
+        <p>Nechajte si poslať podrobný rozbor vášho výpočtu priamo do e-mailu. Report obsahuje odhad ročnej úspory, odporúčaný výkon zariadenia a informácie o aktuálne dostupných dotáciách pre vašu lokalitu.</p>
+        <a href="#" class="btn-primary">Stiahnuť podrobný report mailom</a>
+        <p style="margin-top: 20px; font-size: 0.95rem; color: #666;">
+            * Vaše dáta sú u nás v bezpečí a slúžia výhradne na vypracovanie odbornej ponuky.
+        </p>
+    </div>
+</div>
+
+<script>
     (function() {
-      const ids = [
-        'area','insulation','heating_type','dhw',
-        'kwh_per_kw_year','baseline',
-        'p_el','scop','p_gas','p_wood','p_pellets','eff_gas'
-      ];
+        const ids = [
+            'area','insulation','heating_type','dhw',
+            'kwh_per_kw_year','baseline',
+            'p_el','scop','p_gas','p_wood','p_pellets','eff_gas'
+        ];
 
-      function clamp(n, a, b){ return Math.max(a, Math.min(b, n)); }
-      
-      function fmtMoney(n) {
-        return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-      }
-
-      function calc() {
-        const area = +document.getElementById('area').value || 0;
-        const lossFactor = +document.getElementById('insulation').value || 0;
-        const dhw = +document.getElementById('dhw').value || 1.0;
-        const kwhPerKwYear = +document.getElementById('kwh_per_kw_year').value || 2100;
-
-        const lossKw = (area * lossFactor) / 1000;
-        const hpPower = lossKw * dhw; 
-        const totalNeed = lossKw * kwhPerKwYear * dhw;
-
-        document.getElementById('hp_suggested').value = (hpPower > 0 ? hpPower.toFixed(1) : '0.0') + ' kW';
-        document.getElementById('loss_val').textContent = (lossKw > 0 ? lossKw.toFixed(1) : '0.0') + ' kW';
-        document.getElementById('need_val').textContent = fmtMoney(totalNeed) + ' kWh';
-
-        const baseScop = +document.getElementById('scop').value || 4.2;
-        const sys = document.getElementById('heating_type').value;
-
-        let scopAdj = 0;
-        let note = '';
-        let noteColor = '#555';
-
-        if (sys === 'rad') { 
-            scopAdj = -1.1; 
-            note = 'Radiátory (55°C): Vyššia spotreba'; 
-            noteColor = 'var(--warning-orange)';
-        }
-        if (sys === 'floor') { 
-            scopAdj = 0; 
-            note = 'Podlahovka (35°C): Optimum'; 
-            noteColor = 'var(--success-green)';
+        function fmtMoney(n) {
+            return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
         }
 
-        const scopEff = clamp(baseScop + scopAdj, 1.2, 6.0);
-        
-        document.getElementById('scop_eff').value = scopEff.toFixed(2);
-        const noteEl = document.getElementById('scop_note');
-        noteEl.value = note;
-        noteEl.style.color = noteColor;
+        function calc() {
+            const area = +document.getElementById('area').value || 0;
+            const lossFactor = +document.getElementById('insulation').value || 0;
+            const dhw = +document.getElementById('dhw').value || 1.0;
+            const kwhPerKwYear = +document.getElementById('kwh_per_kw_year').value || 2100;
 
-        const pEl = +document.getElementById('p_el').value || 0;
-        const pGas = +document.getElementById('p_gas').value || 0;
-        const pWood = Math.max(1, +document.getElementById('p_wood').value || 1);
-        const pPel = Math.max(1, +document.getElementById('p_pellets').value || 1);
-        const effGas = ((+document.getElementById('eff_gas').value || 95) / 100);
+            const lossKw = (area * lossFactor) / 1000;
+            const hpPower = (lossKw * dhw) + 0.3; // Rezerva na TÚV
+            const totalNeed = lossKw * kwhPerKwYear * dhw;
 
-        const costHP = (totalNeed / scopEff) * pEl;
-        const costGas = effGas > 0 ? (totalNeed / effGas) * pGas : Infinity;
-        const costWood = (totalNeed / 0.80) * (pWood / 1900);
-        const costPel = (totalNeed / 0.88) * (pPel / 4800);
-        const costResEl = totalNeed * pEl;
+            document.getElementById('hp_suggested').value = (hpPower > 0 ? hpPower.toFixed(1) : '0.0') + ' kW';
+            document.getElementById('loss_val').textContent = (lossKw > 0 ? lossKw.toFixed(1) : '0.0') + ' kW';
+            document.getElementById('need_val').textContent = fmtMoney(totalNeed) + ' kWh';
 
-        const costs = [
-          { key:'hp', name: 'Tepelné čerpadlo', val: costHP },
-          { key:'gas', name: 'Zemný plyn', val: costGas },
-          { key:'pellets', name: 'Drevené pelety', val: costPel },
-          { key:'wood', name: 'Palivové drevo', val: costWood },
-          { key:'res_el', name: 'Elektrina (priamovýhrev)', val: costResEl }
-        ].map(x => ({...x, val: isFinite(x.val) ? x.val : 0 }))
-         .sort((a,b) => a.val - b.val);
+            const baseScop = +document.getElementById('scop').value || 4.2;
+            const sys = document.getElementById('heating_type').value;
 
-        const max = Math.max(1, ...costs.map(c => c.val));
+            let scopAdj = 0;
+            let note = '';
+            let noteColor = '#999';
 
-        document.getElementById('resultsList').innerHTML = costs.map(item => `
-          <div class="res-item">
-            <div class="res-info">
-                <span>${item.name}</span>
-                <span>${fmtMoney(item.val)} €</span>
-            </div>
-            <div class="bar-bg">
-                <div class="bar-fill" style="width:${(item.val/max)*100}%"></div>
-            </div>
-          </div>
-        `).join('');
+            if (sys === 'rad') { 
+                scopAdj = -1.1; 
+                note = 'Radiátory (55°C): Vyššia záťaž'; 
+                noteColor = 'var(--secondary-color)';
+            } else { 
+                scopAdj = 0; 
+                note = 'Podlahovka (35°C): Optimum'; 
+                noteColor = '#28a745';
+            }
 
-        const baseline = document.getElementById('baseline').value;
-        const baseItem = costs.find(c => c.key === baseline);
-        const hpItem = costs.find(c => c.key === 'hp');
-        const savings = Math.max(0, (baseItem?.val || 0) - (hpItem?.val || 0));
-        
-        document.getElementById('save_val').textContent = fmtMoney(savings) + ' €';
+            const scopEff = Math.max(1.2, baseScop + scopAdj);
+            document.getElementById('scop_eff').value = scopEff.toFixed(2);
+            const noteEl = document.getElementById('scop_note');
+            noteEl.value = note;
+            noteEl.style.color = noteColor;
 
-        try {
-          window.parent.postMessage({ type: 'spektra:resize', height: document.body.scrollHeight }, '*');
-        } catch (e) {}
-      }
+            const pEl = +document.getElementById('p_el').value || 0;
+            const pGas = +document.getElementById('p_gas').value || 0;
+            const pWood = Math.max(1, +document.getElementById('p_wood').value || 1);
+            const pPel = Math.max(1, +document.getElementById('p_pellets').value || 1);
+            const effGas = ((+document.getElementById('eff_gas').value || 95) / 100);
 
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (!el) return;
-        el.addEventListener('input', calc);
-        el.addEventListener('change', calc);
-      });
+            const costHP = (totalNeed / scopEff) * pEl;
+            const costGas = (totalNeed / effGas) * pGas;
+            const costWood = (totalNeed / 0.80) * (pWood / 1900);
+            const costPel = (totalNeed / 0.88) * (pPel / 4800);
+            const costResEl = totalNeed * pEl;
 
-      window.addEventListener('load', calc);
-      window.addEventListener('resize', calc);
+            const costs = [
+                { key:'hp', name: 'Tepelné čerpadlo', val: costHP },
+                { key:'gas', name: 'Zemný plyn', val: costGas },
+                { key:'pellets', name: 'Drevené pelety', val: costPel },
+                { key:'wood', name: 'Palivové drevo', val: costWood },
+                { key:'res_el', name: 'Elektrický kotol', val: costResEl }
+            ].sort((a,b) => a.val - b.val);
+
+            const max = Math.max(1, ...costs.map(c => c.val));
+
+            document.getElementById('resultsList').innerHTML = costs.map(item => `
+                <div class="res-item">
+                    <div class="res-info">
+                        <span>${item.name}</span>
+                        <span style="color:${item.key==='hp'?'#28a745':'inherit'}">${fmtMoney(item.val)} € / rok</span>
+                    </div>
+                    <div class="bar-bg">
+                        <div class="bar-fill" style="width:${(item.val/max)*100}%; background:${item.key==='hp'?'#28a745':'var(--secondary-color)'}"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            const baseline = document.getElementById('baseline').value;
+            const baseItem = costs.find(c => c.key === baseline);
+            const hpItem = costs.find(c => c.key === 'hp');
+            const savings = Math.max(0, (baseItem?.val || 0) - (hpItem?.val || 0));
+            
+            document.getElementById('save_val').textContent = fmtMoney(savings) + ' €';
+        }
+
+        ids.forEach(id => {
+            const el = document.getElementById(id);
+            if (el) {
+                el.addEventListener('input', calc);
+                el.addEventListener('change', calc);
+            }
+        });
+
+        window.addEventListener('load', calc);
     })();
-  </script>
+</script>
 
 </body>
 </html>
