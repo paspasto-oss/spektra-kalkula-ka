@@ -9,7 +9,6 @@
 
     <style>
         :root {
-            /* Vami definované farby pre Spektra Install */
             --primary-color: #1F487E !important;
             --secondary-color: #e63946 !important;
             --text-color: #2b2d42 !important;
@@ -103,11 +102,11 @@
 
         .card-title h2 {
             font-size: 1rem;
-            margin: 0;
+            margin: 0 !important;
             color: var(--primary-color) !important;
             text-transform: uppercase;
             font-weight: 800;
-            border-bottom: none !important; /* Reset pre globálne h2 štýly */
+            border-bottom: none !important;
             padding-bottom: 0 !important;
         }
 
@@ -218,7 +217,9 @@
         }
         .btn-main:hover { background: #b92e3a !important; transform: translateY(-2px); }
 
-        /* --- INFO SECTION (VAŠ KÓD) --- */
+        /* --- INFO SECTION (Obal pre skrytie pri tlači) --- */
+        .info-content-wrapper { width: 100%; }
+
         .intro-section {
             text-align: center;
             margin-bottom: 60px;
@@ -403,11 +404,41 @@
             .summary-grid { grid-template-columns: 1fr; }
         }
 
+        /* --- PRINT LOGIC --- */
         @media print {
-            .btn-main, .cta-box, .btn-primary { display: none !important; }
-            body { background: white; }
-            .card { box-shadow: none; border: 1px solid #ccc; break-inside: avoid; }
-            .grid { grid-template-columns: 1fr 1fr !important; }
+            body { background: #fff !important; }
+            .container { max-width: 100%; padding: 0; }
+            
+            /* Skryť informačné sekcie */
+            .info-content-wrapper, .cta-box, .btn-main {
+                display: none !important;
+            }
+
+            .header-title h1 { font-size: 1.8rem; }
+
+            /* Kalkulačka na jednu stranu */
+            .grid {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 20px !important;
+                margin-bottom: 0;
+            }
+
+            .card {
+                box-shadow: none !important;
+                border: 1px solid #ccc !important;
+                padding: 15px !important;
+                break-inside: avoid;
+            }
+
+            .card::before { height: 3px; }
+
+            /* Optimalizácia textu a farieb pre tlač */
+            .mini-box { background: #f0f0f0 !important; border: 1px solid #ddd !important; }
+            .bar-bg { background: #eee !important; -webkit-print-color-adjust: exact; }
+            .bar-fill { -webkit-print-color-adjust: exact; }
+            input, select { border: 1px solid #ccc !important; }
+            .hint-text { color: #666 !important; }
         }
     </style>
 </head>
@@ -415,13 +446,13 @@
 
 <div class="container">
     
-    <!-- HEADER KALKULAČKY -->
+    <!-- HEADER KALKULAČKY (Zostáva v reporte) -->
     <div class="header-title">
         <p>Energetické riešenia Spektra</p>
         <h1>Energetická kalkulačka 2026</h1>
     </div>
 
-    <!-- KALKULAČKA (INTERAKTÍVNA ČASŤ) -->
+    <!-- KALKULAČKA (INTERAKTÍVNA ČASŤ - Zostáva v reporte) -->
     <div class="grid">
         <!-- KARTA 1: VSTUPY -->
         <div class="card">
@@ -574,105 +605,109 @@
                 <div class="mini-box"><b>Vaša úspora</b><span id="save_val">0 €</span></div>
             </div>
 
+            <!-- Tlačidlo sa pri tlači skryje -->
             <button class="btn-main" onclick="window.print()">Vytlačiť PDF Report</button>
         </div>
     </div>
 
-    <!-- INFO SEKCE (VAŠ OBSAH) -->
-    <div class="intro-section">
-        <h2>Ako funguje naša energetická kalkulačka?</h2>
-        <p>
-            V <span class="highlight">Spektra Install</span> chápeme, že prechod na moderné vykurovanie je investícia na desaťročia. Práve preto sme vyvinuli nástroj <strong>Edition 2026</strong>. Táto energetická kalkulačka nie je len jednoduchý program, ale komplexný algoritmus, ktorý spracováva tisíce kombinácií dát, aby vám priniesol výsledok prispôsobený slovenskej architektúre a klimatickým podmienkam.
-        </p>
-        <p>
-            Či už plánujete rekonštrukciu staršieho rodinného domu alebo staviate modernú novostavbu, správny odhad energetických potrieb je základným kameňom vášho úspechu. Naša kalkulačka zjednodušuje komplikovanú inžiniersku prácu do niekoľkých kliknutí, pričom <strong>automaticky zohľadňuje všetky kľúčové premenné</strong>, ako sú objemové straty vzduchu, prestup tepla cez rôzne materiály a špecifické požiadavky na prípravu teplej vody.
-        </p>
-    </div>
-
-    <div class="process-steps">
-        <div class="step-card">
-            <div class="step-number">1</div>
-            <h4>Vložíte parametre</h4>
-            <p>Zadáte základné údaje o ploche a type izolácie. Systém okamžite priradí technické koeficienty pre váš typ stavby.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-number">2</div>
-            <h4>Prebehne analýza</h4>
-            <p>Algoritmus prepočíta tepelnú stratu obálky domu aj potrebu energie na ohrev úžitkovej vody pre celú rodinu.</p>
-        </div>
-        <div class="step-card">
-            <div class="step-number">3</div>
-            <h4>Získate report</h4>
-            <p>Výsledok neuvidíte len na obrazovke. Môžete si ho nechať zaslať na e-mail vo forme podrobného energetického prehľadu.</p>
-        </div>
-    </div>
-
-    <h2>Prečo je dôležitá presná tepelná strata?</h2>
-    <p>
-        Tepelná strata domu je v podstate množstvo energie, ktoré musíte do domu neustále dodávať, aby ste v ňom udržali príjemnú teplotu, kým vonku mrzne. Ak tento výpočet podceníte, vaše tepelné čerpadlo nebude stíhať a zapne si drahú elektrickú špirálu. Ak ho naopak nadhodnotíte, kúpite si zbytočne drahý stroj, ktorý sa bude neustále zapínať a vypínať, čím sa rýchlejšie opotrebuje.
-    </p>
-    <p>
-        Naša technológia hľadá takzvané <span class="highlight">ekonomické optimum</span>. To znamená výkon, pri ktorom dosiahnete najnižšie prevádzkové náklady pri zachovaní maximálnej životnosti zariadenia. V roku 2026 je pri cenách energií dôležitý každý jeden ušetrený kilowatt, a práve správne dimenzovanie je prvým krokom k návratnosti vašej investície.
-    </p>
-
-    <div class="savings-box">
-        <div class="savings-icon">💰</div>
-        <div class="savings-content">
-            <h3>Maximalizujte úspory a dotácie</h3>
+    <!-- OBAL PRE SEKCIU S TEXTOM (Tento obal sa pri tlači skryje) -->
+    <div class="info-content-wrapper">
+        <div class="intro-section">
+            <h2>Ako funguje naša energetická kalkulačka?</h2>
             <p>
-                Inštaláciou správne dimenzovaného tepelného čerpadla dokážete znížiť svoje účty za energie až o <strong>70 %</strong> v porovnaní s elektrokotlom alebo starým plynovým kotlom. Navyše, naše riešenia sú plne kompatibilné s dotačným programom <strong>Zelená domácnostiam</strong>, kde môžete získať príspevok v hodnote niekoľkých tisíc eur.
+                V <span class="highlight">Spektra Install</span> chápeme, že prechod na moderné vykurovanie je investícia na desaťročia. Práve preto sme vyvinuli nástroj <strong>Edition 2026</strong>. Táto energetická kalkulačka nie je len jednoduchý program, ale komplexný algoritmus, ktorý spracováva tisíce kombinácií dát, aby vám priniesol výsledok prispôsobený slovenskej architektúre a klimatickým podmienkam.
+            </p>
+            <p>
+                Či už plánujete rekonštrukciu staršieho rodinného domu alebo staviate modernú novostavbu, správny odhad energetických potrieb je základným kameňom vášho úspechu. Naša kalkulačka zjednodušuje komplikovanú inžiniersku prácu do niekoľkých kliknutí, pričom <strong>automaticky zohľadňuje všetky kľúčové premenné</strong>, ako sú objemové straty vzduchu, prestup tepla cez rôzne materiály a špecifické požiadavky na prípravu teplej vody.
             </p>
         </div>
-    </div>
 
-    <h2>Faktory, ktoré ovplyvňujú váš výsledok</h2>
-    <div class="grid-details">
-        <div class="detail-item">
-            <span class="check-icon">✓</span>
-            <div>
-                <strong>Lokalita a podnebie:</strong> Kalkulačka vie, že zima v Žiline vyžaduje iný výkon ako zima v Komárne. Zohľadňujeme klimatické zóny Slovenska.
+        <div class="process-steps">
+            <div class="step-card">
+                <div class="step-number">1</div>
+                <h4>Vložíte parametre</h4>
+                <p>Zadáte základné údaje o ploche a type izolácie. Systém okamžite priradí technické koeficienty pre váš typ stavby.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">2</div>
+                <h4>Prebehne analýza</h4>
+                <p>Algoritmus prepočíta tepelnú stratu obálky domu aj potrebu energie na ohrev úžitkovej vody pre celú rodinu.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">3</div>
+                <h4>Získate report</h4>
+                <p>Výsledok neuvidíte len na obrazovke. Môžete si ho nechať zaslať na e-mail vo forme podrobného energetického prehľadu.</p>
             </div>
         </div>
-        <div class="detail-item">
-            <span class="check-icon">✓</span>
-            <div>
-                <strong>Stav zateplenia:</strong> Analyzujeme rozdiely medzi pôvodným murivom, čiastočným zateplením a modernými štandardmi A0.
-            </div>
-        </div>
-        <div class="detail-item">
-            <span class="check-icon">✓</span>
-            <div>
-                <strong>Počet osôb:</strong> Príprava teplej vody pre 4 osoby spotrebuje významnú časť výkonu. Tento faktor nikdy nezanedbávame.
-            </div>
-        </div>
-        <div class="detail-item">
-            <span class="check-icon">✓</span>
-            <div>
-                <strong>Okná a dvere:</strong> Zohľadňujeme rozdiel v stratách medzi starými dvojsklami a modernými oknami s trojsklom.
-            </div>
-        </div>
-    </div>
 
-    <h2>Často kladené otázky (FAQ)</h2>
-    <div class="faq-section">
-        <div class="faq-item">
-            <strong>Je výsledok z kalkulačky záväzný?</strong>
-            <p>Výsledok slúži ako vysoko presný orientačný bod. Pre finálnu inštaláciu vždy odporúčame kontrolu naším technikom priamo na mieste, aby sa zohľadnili aj drobné detaily stavby.</p>
-        </div>
-        <div class="faq-item">
-            <strong>Čo ak plánujem v budúcnosti dom zatepliť?</strong>
-            <p>V tom prípade odporúčame zadať do kalkulačky cieľový stav. Vyhnete sa tak nákupu príliš silného čerpadla, ktoré by po zateplení bolo neefektívne.</p>
-        </div>
-        <div class="faq-item">
-            <strong>Počíta kalkulačka aj s ohrevom bazéna?</strong>
-            <p>Základný výpočet je určený pre kúrenie a teplú úžitkovú vodu. Ak máte špecifické požiadavky ako ohrev bazéna, uveďte to prosím v dopyte po odoslaní reportu.</p>
-        </div>
-        <div class="faq-item">
-            <strong>Ako ovplyvňuje typ kúrenia výkon TČ?</strong>
-            <p>Podlahové kúrenie pracuje s nižšou teplotou vody ako radiátory, čo zvyšuje efektivitu čerpadla. Naša kalkulačka tieto rozdiely v dynamike sústavy spracováva automaticky.</p>
-        </div>
-    </div>
+        <h2>Prečo je dôležitá presná tepelná strata?</h2>
+        <p>
+            Tepelná strata domu je v podstate množstvo energie, ktoré musíte do domu neustále dodávať, aby ste v ňom udržali príjemnú teplotu, kým vonku mrzne. Ak tento výpočet podceníte, vaše tepelné čerpadlo nebude stíhať a zapne si drahú elektrickú špirálu. Ak ho naopak nadhodnotíte, kúpite si zbytočne drahý stroj, ktorý sa bude neustále zapínať a vypínať, čím sa rýchlejšie opotrebuje.
+        </p>
+        <p>
+            Naša technológia hľadá takzvané <span class="highlight">ekonomické optimum</span>. To znamená výkon, pri ktorom dosiahnete najnižšie prevádzkové náklady pri zachovani maximálnej životnosti zariadenia. V roku 2026 je pri cenách energií dôležitý každý jeden ušetrený kilowatt, a práve správne dimenzovanie je prvým krokom k návratnosti vašej investície.
+        </p>
 
+        <div class="savings-box">
+            <div class="savings-icon">💰</div>
+            <div class="savings-content">
+                <h3>Maximalizujte úspory a dotácie</h3>
+                <p>
+                    Inštaláciou správne dimenzovaného tepelného čerpadla dokážete znížiť svoje účty za energie až o <strong>70 %</strong> v porovnaní s elektrokotlom alebo starým plynovým kotlom. Navyše, naše riešenia sú plne kompatibilné s dotačným programom <strong>Zelená domácnostiam</strong>, kde môžete získať príspevok v hodnote niekoľkých tisíc eur.
+                </p>
+            </div>
+        </div>
+
+        <h2>Faktory, ktoré ovplyvňujú váš výsledok</h2>
+        <div class="grid-details">
+            <div class="detail-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>Lokalita a podnebie:</strong> Kalkulačka vie, že zima v Žiline vyžaduje iný výkon ako zima v Komárne. Zohľadňujeme klimatické zóny Slovenska.
+                </div>
+            </div>
+            <div class="detail-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>Stav zateplenia:</strong> Analyzujeme rozdiely medzi pôvodným murivom, čiastočným zateplením a modernými štandardmi A0.
+                </div>
+            </div>
+            <div class="detail-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>Počet osôb:</strong> Príprava teplej vody pre 4 osoby spotrebuje významnú časť výkonu. Tento faktor nikdy nezanedbávame.
+                </div>
+            </div>
+            <div class="detail-item">
+                <span class="check-icon">✓</span>
+                <div>
+                    <strong>Okná a dvere:</strong> Zohľadňujeme rozdiel v stratách medzi starými dvojsklami a modernými oknami s trojsklom.
+                </div>
+            </div>
+        </div>
+
+        <h2>Často kladené otázky (FAQ)</h2>
+        <div class="faq-section">
+            <div class="faq-item">
+                <strong>Je výsledok z kalkulačky záväzný?</strong>
+                <p>Výsledok slúži ako vysoko presný orientačný bod. Pre finálnu inštaláciu vždy odporúčame kontrolu naším technikom priamo na mieste, aby sa zohľadnili aj drobné detaily stavby.</p>
+            </div>
+            <div class="faq-item">
+                <strong>Čo ak plánujem v budúcnosti dom zatepliť?</strong>
+                <p>V tom prípade odporúčame zadať do kalkulačky cieľový stav. Vyhnete sa tak nákupu príliš silného čerpadla, ktoré by po zateplení bolo neefektívne.</p>
+            </div>
+            <div class="faq-item">
+                <strong>Počíta kalkulačka aj s ohrevom bazéna?</strong>
+                <p>Základný výpočet je určený pre kúrenie a teplú úžitkovú vodu. Ak máte špecifické požiadavky ako ohrev bazéna, uveďte to prosím v dopyte po odoslaní reportu.</p>
+            </div>
+            <div class="faq-item">
+                <strong>Ako ovplyvňuje typ kúrenia výkon TČ?</strong>
+                <p>Podlahové kúrenie pracuje s nižšou teplotou vody ako radiátory, čo zvyšuje efektivitu čerpadla. Naša kalkulačka tieto rozdiely v dynamike sústavy spracováva automaticky.</p>
+            </div>
+        </div>
+    </div> <!-- Koniec skrytej časti pre tlač -->
+
+    <!-- CTA Box (Tiež skrytý pri tlači) -->
     <div class="cta-box">
         <h3>Chcete mať výsledky prehľadne uložené?</h3>
         <p>Nechajte si poslať podrobný rozbor vášho výpočtu priamo do e-mailu. Report obsahuje odhad ročnej úspory, odporúčaný výkon zariadenia a informácie o aktuálne dostupných dotáciách pre vašu lokalitu.</p>
@@ -702,7 +737,7 @@
             const kwhPerKwYear = +document.getElementById('kwh_per_kw_year').value || 2100;
 
             const lossKw = (area * lossFactor) / 1000;
-            const hpPower = (lossKw * dhw) + 0.3; // Rezerva na TÚV
+            const hpPower = (lossKw * dhw) + 0.3; 
             const totalNeed = lossKw * kwhPerKwYear * dhw;
 
             document.getElementById('hp_suggested').value = (hpPower > 0 ? hpPower.toFixed(1) : '0.0') + ' kW';
