@@ -217,7 +217,7 @@
         }
         .btn-main:hover { background: #b92e3a !important; transform: translateY(-2px); }
 
-        /* --- INFO SECTION (Obal pre skrytie pri tlači) --- */
+        /* --- INFO SECTION --- */
         .info-content-wrapper { width: 100%; }
 
         .intro-section {
@@ -404,41 +404,81 @@
             .summary-grid { grid-template-columns: 1fr; }
         }
 
-        /* --- PRINT LOGIC --- */
+        /* --- PRINT LOGIC (RIADKOVÝ DOKUMENT) --- */
         @media print {
-            body { background: #fff !important; }
+            body { background: #fff !important; color: #000 !important; }
             .container { max-width: 100%; padding: 0; }
             
-            /* Skryť informačné sekcie */
+            /* Skryť informačné sekcie a tlačidlá */
             .info-content-wrapper, .cta-box, .btn-main {
                 display: none !important;
             }
 
-            .header-title h1 { font-size: 1.8rem; }
+            .header-title { margin-bottom: 30px; text-align: left; }
+            .header-title h1 { font-size: 1.8rem; color: #000 !important; }
+            .header-title p { color: #666 !important; }
 
-            /* Kalkulačka na jednu stranu */
+            /* Zmena mriežky na riadkový dokument */
             .grid {
-                display: grid !important;
-                grid-template-columns: 1fr 1fr !important;
-                gap: 20px !important;
+                display: block !important;
                 margin-bottom: 0;
             }
 
             .card {
                 box-shadow: none !important;
-                border: 1px solid #ccc !important;
-                padding: 15px !important;
+                border: none !important;
+                border-bottom: 1px solid #eee !important;
+                border-radius: 0 !important;
+                padding: 20px 0 !important;
+                margin-bottom: 10px !important;
                 break-inside: avoid;
+                width: 100% !important;
             }
 
-            .card::before { height: 3px; }
+            /* Odstrániť farebnú linku navrchu v PDF reporte */
+            .card::before { display: none; }
 
-            /* Optimalizácia textu a farieb pre tlač */
-            .mini-box { background: #f0f0f0 !important; border: 1px solid #ddd !important; }
+            .card-title { 
+                margin-bottom: 15px; 
+                border-bottom: 2px solid #1F487E !important; 
+                padding-bottom: 5px;
+            }
+            
+            .card-title h2 { color: #1F487E !important; font-size: 1.1rem !important; }
+
+            .input-row {
+                gap: 30px !important;
+                margin-bottom: 10px;
+            }
+
+            /* Úprava vstupných polí pre čistejší text v PDF */
+            input, select { 
+                border: none !important; 
+                padding: 0 !important; 
+                height: auto !important; 
+                font-weight: 700; 
+                background: transparent !important;
+                color: #000 !important;
+            }
+            
+            select { background-image: none !important; }
+
+            .summary-grid {
+                display: grid !important;
+                grid-template-columns: repeat(3, 1fr) !important;
+                gap: 10px !important;
+                margin-top: 30px;
+            }
+
+            .mini-box { 
+                background: #f8f9fa !important; 
+                border: 1px solid #ddd !important; 
+                -webkit-print-color-adjust: exact; 
+            }
+
             .bar-bg { background: #eee !important; -webkit-print-color-adjust: exact; }
             .bar-fill { -webkit-print-color-adjust: exact; }
-            input, select { border: 1px solid #ccc !important; }
-            .hint-text { color: #666 !important; }
+            .hint-text { color: #777 !important; }
         }
     </style>
 </head>
@@ -446,13 +486,13 @@
 
 <div class="container">
     
-    <!-- HEADER KALKULAČKY (Zostáva v reporte) -->
+    <!-- HEADER KALKULAČKY -->
     <div class="header-title">
         <p>Energetické riešenia Spektra</p>
         <h1>Energetická kalkulačka 2026</h1>
     </div>
 
-    <!-- KALKULAČKA (INTERAKTÍVNA ČASŤ - Zostáva v reporte) -->
+    <!-- KALKULAČKA -->
     <div class="grid">
         <!-- KARTA 1: VSTUPY -->
         <div class="card">
@@ -605,12 +645,11 @@
                 <div class="mini-box"><b>Vaša úspora</b><span id="save_val">0 €</span></div>
             </div>
 
-            <!-- Tlačidlo sa pri tlači skryje -->
             <button class="btn-main" onclick="window.print()">Vytlačiť PDF Report</button>
         </div>
     </div>
 
-    <!-- OBAL PRE SEKCIU S TEXTOM (Tento obal sa pri tlači skryje) -->
+    <!-- INFO SEKCE -->
     <div class="info-content-wrapper">
         <div class="intro-section">
             <h2>Ako funguje naša energetická kalkulačka?</h2>
@@ -705,16 +744,13 @@
                 <p>Podlahové kúrenie pracuje s nižšou teplotou vody ako radiátory, čo zvyšuje efektivitu čerpadla. Naša kalkulačka tieto rozdiely v dynamike sústavy spracováva automaticky.</p>
             </div>
         </div>
-    </div> <!-- Koniec skrytej časti pre tlač -->
+    </div>
 
-    <!-- CTA Box (Tiež skrytý pri tlači) -->
+    <!-- CTA Box -->
     <div class="cta-box">
         <h3>Chcete mať výsledky prehľadne uložené?</h3>
         <p>Nechajte si poslať podrobný rozbor vášho výpočtu priamo do e-mailu. Report obsahuje odhad ročnej úspory, odporúčaný výkon zariadenia a informácie o aktuálne dostupných dotáciách pre vašu lokalitu.</p>
         <a href="#" class="btn-primary">Stiahnuť podrobný report mailom</a>
-        <p style="margin-top: 20px; font-size: 0.95rem; color: #666;">
-            * Vaše dáta sú u nás v bezpečí a slúžia výhradne na vypracovanie odbornej ponuky.
-        </p>
     </div>
 </div>
 
