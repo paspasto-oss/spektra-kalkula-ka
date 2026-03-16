@@ -36,6 +36,11 @@
             padding: 40px 20px;
         }
 
+        /* --- PRINT HEADER (Skrytý na webe) --- */
+        #print-official-header {
+            display: none;
+        }
+
         /* --- HEADER --- */
         .header-title {
             text-align: center;
@@ -257,34 +262,103 @@
         @media print {
             body { background: #fff !important; color: #000 !important; font-size: 11pt; }
             .container { max-width: 100%; padding: 0; }
-            .info-content-wrapper, .cta-box, .btn-main, .card-title svg { display: none !important; }
-            .header-title { margin-bottom: 40px; text-align: left; border-bottom: 2px solid #000; padding-bottom: 10px; }
-            .header-title h1 { font-size: 1.6rem; color: #000 !important; font-weight: 800; }
-            .header-title p { color: #444 !important; font-size: 0.9rem; font-weight: 700; margin: 0; }
-            .grid { display: block !important; }
-            .card { box-shadow: none !important; border: none !important; border-radius: 0 !important; padding: 10px 0 !important; margin-bottom: 30px !important; break-inside: avoid; width: 100% !important; }
-            .card::before { display: none; }
-            .card-title { margin-bottom: 15px; border-bottom: 1px solid #000 !important; padding-bottom: 5px; }
-            .card-title h2 { color: #000 !important; font-size: 1.1rem !important; font-weight: 800; }
-            .input-row { display: block !important; }
             
-            .input-group { 
-                display: flex !important; 
-                flex-direction: column !important; /* Upravené pre zobrazenie hintu pod label/vstupom */
-                border-bottom: 1px dotted #bbb; 
-                padding: 6px 0; 
-                margin-bottom: 4px !important; 
+            /* Skryť informačné sekcie a zbytočnosti */
+            .info-content-wrapper, .cta-box, .btn-main, .card-title svg, .header-title {
+                display: none !important;
             }
 
-            /* Riadok pre Label a Hodnotu */
+            /* Oficiálna hlavička Spektra pre PDF */
+            #print-official-header {
+                display: flex !important;
+                justify-content: space-between;
+                align-items: flex-end;
+                border-bottom: 3px solid var(--primary-color);
+                padding-bottom: 15px;
+                margin-bottom: 30px;
+                -webkit-print-color-adjust: exact;
+            }
+            .print-logo-box h1 {
+                margin: 0;
+                font-size: 1.8rem;
+                font-weight: 800;
+                color: var(--primary-color) !important;
+            }
+            .print-logo-box p {
+                margin: 0;
+                font-size: 0.8rem;
+                font-weight: 700;
+                color: var(--secondary-color) !important;
+            }
+            .print-meta-box {
+                text-align: right;
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+
+            /* Zmena mriežky na lineárny zoznam */
+            .grid { display: block !important; }
+
+            .card {
+                box-shadow: none !important;
+                border: none !important;
+                border-radius: 0 !important;
+                padding: 10px 0 !important;
+                margin-bottom: 30px !important;
+                break-inside: avoid;
+                width: 100% !important;
+            }
+
+            .card::before { display: none; }
+
+            .card-title { 
+                margin-bottom: 15px; 
+                border-bottom: 1px solid #000 !important; 
+                padding-bottom: 5px;
+            }
+            
+            .card-title h2 { color: #000 !important; font-size: 1.1rem !important; font-weight: 800; }
+
+            /* Lineárny formát parametrov */
+            .input-row { display: block !important; }
+
+            .input-group {
+                display: flex !important;
+                flex-direction: column !important;
+                border-bottom: 1px dotted #bbb;
+                padding: 4px 0;
+                margin-bottom: 2px !important;
+            }
+
             .input-line {
                 display: flex;
                 justify-content: space-between;
                 align-items: baseline;
             }
 
-            label { margin-bottom: 0 !important; font-size: 0.85rem !important; color: #333 !important; font-weight: 600; text-transform: none; }
-            input, select { border: none !important; padding: 0 !important; height: auto !important; font-weight: 800; background: transparent !important; color: #000 !important; text-align: right !important; width: auto !important; font-family: inherit; font-size: 0.95rem; }
+            label { 
+                margin-bottom: 0 !important; 
+                font-size: 0.85rem !important; 
+                color: #333 !important; 
+                font-weight: 600;
+                flex: 1;
+                text-transform: none;
+            }
+
+            input, select { 
+                border: none !important; 
+                padding: 0 !important; 
+                height: auto !important; 
+                font-weight: 800; 
+                background: transparent !important;
+                color: #000 !important;
+                text-align: right !important;
+                width: auto !important;
+                min-width: 150px;
+                font-family: inherit;
+                font-size: 0.95rem;
+            }
+
             select { appearance: none; background: none !important; }
 
             .hint-text { 
@@ -296,11 +370,35 @@
                 font-style: italic;
             }
 
-            .res-item { border-bottom: 1px solid #eee; padding: 4px 0; margin-bottom: 0; }
+            .res-item { 
+                border-bottom: 1px solid #eee; 
+                padding: 4px 0; 
+                margin-bottom: 0;
+            }
             .res-info { font-size: 0.9rem; font-weight: 700; }
             .bar-bg { display: none; }
-            .summary-grid { display: flex !important; flex-direction: row; justify-content: space-between; gap: 20px !important; margin-top: 40px; border-top: 2px solid #000; padding-top: 15px; background: #f9f9f9 !important; -webkit-print-color-adjust: exact; padding: 15px; }
-            .mini-box { background: none !important; border: none !important; text-align: left; padding: 0; flex: 1; }
+
+            .summary-grid {
+                display: flex !important;
+                flex-direction: row;
+                justify-content: space-between;
+                gap: 20px !important;
+                margin-top: 40px;
+                border-top: 2px solid #000;
+                padding-top: 15px;
+                background: #f9f9f9 !important;
+                -webkit-print-color-adjust: exact;
+                padding: 15px;
+            }
+
+            .mini-box { 
+                background: none !important; 
+                border: none !important; 
+                text-align: left;
+                padding: 0;
+                flex: 1;
+            }
+
             .mini-box b { font-size: 0.7rem; color: #444 !important; }
             .mini-box span { font-size: 1.1rem; color: var(--secondary-color) !important; font-weight: 800; }
         }
@@ -309,13 +407,29 @@
 <body>
 
 <div class="container">
+    
+    <!-- OFICIÁLNA HLAVIČKA PRE TLAČ (Skrytá na obrazovke) -->
+    <div id="print-official-header">
+        <div class="print-logo-box">
+            <h1>SPEKTRA</h1>
+            <p>ENERGETICKÉ RIEŠENIA</p>
+        </div>
+        <div class="print-meta-box">
+            <strong>Dátum vystavenia:</strong> <span id="current-date">---</span><br>
+            <strong>Typ dokumentu:</strong> Energetický protokol 2026<br>
+            <strong>Web:</strong> spektrainstall.sk
+        </div>
+    </div>
+
+    <!-- HLAVA NA OBRAZOVKE -->
     <div class="header-title">
         <p>ENERGETICKÉ RIEŠENIA SPEKTRA</p>
         <h1>Energetická kalkulačka 2026</h1>
     </div>
 
+    <!-- KALKULAČKA -->
     <div class="grid">
-        <!-- VSTUPNÉ ÚDAJE -->
+        <!-- VSTUPY -->
         <div class="card">
             <div class="card-title">
                 <svg viewBox="0 0 24 24"><path d="M10,20V14H14V20H19V12H22L12,3L2,12H5V20H10Z"/></svg>
@@ -377,12 +491,12 @@
                             <option value="res_el">Elektrický kotol</option>
                         </select>
                     </div>
-                    <div class="hint-text">Referenčný zdroj tepla pre porovnanie úspor.</div>
+                    <div class="hint-text">Referenčný zdroj tepla pre porovnanie.</div>
                 </div>
             </div>
         </div>
 
-        <!-- VÝKON A ÚČINNOSŤ -->
+        <!-- VÝKON -->
         <div class="card">
             <div class="card-title">
                 <svg viewBox="0 0 24 24"><path d="M13,10H18L12,22V14H7L13,2Z"/></svg>
@@ -401,7 +515,7 @@
                         <label>Elektrina (€/kWh)</label>
                         <input type="number" id="p_el" step="0.01" value="0.20">
                     </div>
-                    <div class="hint-text">Celková koncová cena elektriny vrátane distribúcie.</div>
+                    <div class="hint-text">Celková koncová cena elektriny.</div>
                 </div>
                 <div class="input-group">
                     <div class="input-line">
@@ -415,7 +529,7 @@
                         <label>Reálny SCOP</label>
                         <input type="text" id="scop_eff" readonly>
                     </div>
-                    <div class="hint-text">Účinnosť upravená podľa typu vykurovania.</div>
+                    <div class="hint-text">Účinnosť upravená podľa systému.</div>
                 </div>
                 <div class="input-group">
                     <div class="input-line">
@@ -439,33 +553,33 @@
                         <label>Plyn (€/kWh)</label>
                         <input type="number" id="p_gas" step="0.001" value="0.064">
                     </div>
-                    <div class="hint-text">Cena plynu po započítaní všetkých poplatkov.</div>
+                    <div class="hint-text">Cena plynu po započítaní poplatkov.</div>
                 </div>
                 <div class="input-group">
                     <div class="input-line">
                         <label>Drevo (€/prm)</label>
                         <input type="number" id="p_wood" value="95">
                     </div>
-                    <div class="hint-text">Cena za 1 priestorový meter palivového dreva.</div>
+                    <div class="hint-text">Cena za 1 priestorový meter dreva.</div>
                 </div>
                 <div class="input-group">
                     <div class="input-line">
                         <label>Pelety (€/t)</label>
                         <input type="number" id="p_pellets" value="290">
                     </div>
-                    <div class="hint-text">Cena za 1 tonu certifikovaných peliet A1.</div>
+                    <div class="hint-text">Cena za 1 tonu peliet A1.</div>
                 </div>
                 <div class="input-group">
                     <div class="input-line">
                         <label>Účinnosť kotla (%)</label>
                         <input type="number" id="eff_gas" value="95">
                     </div>
-                    <div class="hint-text">Reálna ročná účinnosť spaľovacieho zdroja.</div>
+                    <div class="hint-text">Reálna ročná účinnosť zdroja.</div>
                 </div>
             </div>
         </div>
 
-        <!-- POROVNANIE -->
+        <!-- VÝSLEDKY -->
         <div class="card">
             <div class="card-title">
                 <svg viewBox="0 0 24 24"><path d="M16,11.78L20.24,4.45L21.97,5.45L16.74,14.5L10.23,10.75L5.46,19H22V21H2V3H4V17.54L9.5,8L16,11.78Z"/></svg>
@@ -481,7 +595,7 @@
         </div>
     </div>
 
-    <!-- INFO SEKCIA -->
+    <!-- INFO SEKCIA (SKRYTÁ PRI TLAČI) -->
     <div class="info-content-wrapper">
         <div class="intro-section">
             <h2>Ako funguje naša energetická kalkulačka?</h2>
@@ -491,10 +605,6 @@
             <div class="step-card"><div class="step-number">1</div><h4>Parametre</h4><p>Zadáte plochu a izoláciu.</p></div>
             <div class="step-card"><div class="step-number">2</div><h4>Analýza</h4><p>Prepočet strát a potreby TÚV.</p></div>
             <div class="step-card"><div class="step-number">3</div><h4>Report</h4><p>Získate protokol v PDF.</p></div>
-        </div>
-        <div class="savings-box">
-            <div class="savings-icon">💰</div>
-            <div class="savings-content"><h3>Úspory a dotácie</h3><p>Znížte účty o 70% s programom <strong>Zelená domácnostiam</strong>.</p></div>
         </div>
     </div>
     <div class="cta-box">
@@ -508,6 +618,17 @@
     (function() {
         const ids = ['area','insulation','heating_type','dhw','kwh_per_kw_year','baseline','p_el','scop','p_gas','p_wood','p_pellets','eff_gas'];
         function fmtMoney(n) { return Math.round(n).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " "); }
+        
+        // Nastavenie dnešného dátumu
+        function setDate() {
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            const el = document.getElementById('current-date');
+            if (el) el.textContent = `${day}. ${month}. ${year}`;
+        }
+
         function calc() {
             const area = +document.getElementById('area').value || 0;
             const lossFactor = +document.getElementById('insulation').value || 0;
@@ -523,10 +644,10 @@
             const sys = document.getElementById('heating_type').value;
             let scopAdj = 0; let note = ''; let noteColor = '#999';
             if (sys === 'rad') { 
-                scopAdj = -0.6; // 3.8 - 0.6 = 3.2
+                scopAdj = -0.6; 
                 note = 'Radiátory (55°C): Reálny SCOP ~3.2'; noteColor = '#e63946';
             } else { 
-                scopAdj = -0.3; // 3.8 - 0.3 = 3.5
+                scopAdj = -0.3; 
                 note = 'Podlahovka (35°C): Reálny SCOP ~3.5'; noteColor = '#28a745';
             }
             const scopEff = Math.max(1.2, baseScop + scopAdj);
@@ -562,7 +683,10 @@
             document.getElementById('save_val').textContent = fmtMoney(savings) + ' €';
         }
         ids.forEach(id => { const el = document.getElementById(id); if (el) { el.addEventListener('input', calc); el.addEventListener('change', calc); }});
-        window.addEventListener('load', calc);
+        window.addEventListener('load', () => {
+            calc();
+            setDate();
+        });
     })();
 </script>
 </body>
