@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "note": "Mapovanie na skladove karty POHODA. Ceny sa nikdy neukladaju do repozitara; nacitaju sa z aktualneho exportu Zasoby.xlsx podla Kodu/PLU.",
+  "items": {
+    "pipe_16": {"code": "11301211100", "plu": "100782", "unit": "m", "label": "REHAU RAUTITAN STABIL 16,2x2,6 kotuc 100 m"},
+    "pipe_20": {"code": "11301311100", "plu": "100783", "unit": "m", "label": "REHAU RAUTITAN STABIL 20x2,9 kotuc 100 m"},
+    "pipe_25": {"code": "11301411050", "plu": "100785", "unit": "m", "label": "REHAU RAUTITAN STABIL 25x3,7 kotuc 50 m"},
+
+    "insulation_16": {"code": "511450013", "plu": "100004", "unit": "m", "label": "TUBEX STANDARD 10-18"},
+    "insulation_20": {"code": "511450014", "plu": "100005", "unit": "m", "label": "TUBEX STANDARD 10-22"},
+    "insulation_25": {"code": "511450015", "plu": "100006", "unit": "m", "label": "TUBEX STANDARD 10-28"},
+
+    "sleeve_16": {"code": "11600011001", "plu": "105627", "unit": "ks", "label": "REHAU RAUTITAN PX nasuvna objimka 16"},
+    "sleeve_20": {"code": "11600021001", "plu": "105628", "unit": "ks", "label": "REHAU RAUTITAN PX nasuvna objimka 20"},
+    "sleeve_25": {"code": "11600031001", "plu": "105629", "unit": "ks", "label": "REHAU RAUTITAN PX nasuvna objimka 25"},
+
+    "elbow_16_90": {"code": "11600211001", "plu": "105622", "unit": "ks", "label": "REHAU RAUTITAN PX koleno 90 16-16"},
+    "elbow_20_90": {"code": "11600221001", "plu": "105626", "unit": "ks", "label": "REHAU RAUTITAN PX koleno 90 20-20"},
+    "elbow_25_90": {"code": "11600231001", "plu": "105623", "unit": "ks", "label": "REHAU RAUTITAN PX koleno 90 25-25"},
+
+    "tee_16_16_16": {"code": "11600311001", "plu": "105645", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 16-16-16"},
+    "tee_20_20_20": {"code": "11600321001", "plu": "105649", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 20-20-20"},
+    "tee_25_25_25": {"code": "11600331001", "plu": "105661", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-25-25"},
+    "tee_20_16_20": {"code": "11600611001", "plu": "105647", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 20-16-20"},
+    "tee_25_16_25": {"code": "11600621001", "plu": "105655", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-16-25"},
+    "tee_25_20_25": {"code": "11600631001", "plu": "105658", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-20-25"},
+    "tee_20_20_16": {"code": "11600711001", "plu": "105651", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 20-20-16"},
+    "tee_20_16_16": {"code": "11600811001", "plu": "105650", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 20-16-16"},
+    "tee_25_16_16": {"code": "11600821001", "plu": "105653", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-16-16"},
+    "tee_25_16_20": {"code": "11600831001", "plu": "105654", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-16-20"},
+    "tee_25_20_16": {"code": "11600841001", "plu": "105656", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-20-16"},
+    "tee_25_20_20": {"code": "11600851001", "plu": "105657", "unit": "ks", "label": "REHAU RAUTITAN PX T-kus 25-20-20"},
+
+    "wall_outlet_16_half": {"code": "14563581001", "plu": "105686", "unit": "ks", "label": "REHAU RAUTITAN RX nastenka 16x1/2 kratka"},
+    "wall_outlet_20_half": {"code": "14563591001", "plu": "105689", "unit": "ks", "label": "REHAU RAUTITAN RX nastenka 20x1/2 kratka"},
+    "wall_outlet_25_3_4": {"code": "14563611001", "plu": "105692", "unit": "ks", "label": "REHAU RAUTITAN RX nastenka 25x3/4 kratka"},
+
+    "schell_polar": {"code": "039970399", "plu": "106725", "unit": "ks", "label": "SCHELL POLAR II nezamrzny ventil DN15"}
+  },
+  "unmapped": {
+    "end_plug": "Vybrat skladovu kartu pre docasnu/plastovu zatku na ukoncenie vyvodu.",
+    "floor_clip_16": "Potvrdit typ prichytky pouzivanej Spektrou pre izolovane potrubie 16.",
+    "floor_clip_20": "Potvrdit typ prichytky pouzivanej Spektrou pre izolovane potrubie 20.",
+    "floor_clip_25": "Potvrdit typ prichytky pouzivanej Spektrou pre izolovane potrubie 25."
+  }
+}
